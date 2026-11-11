@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<title>Resultados de pruebas ObservatoriosApi</title>
+<style>
+body{margin:0;background:#0d1117;color:#e6edf3;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+main{max-width:1180px;margin:40px auto;padding:34px;background:#161b22;border:1px solid #30363d;border-radius:12px}
+h1{font:700 30px system-ui;margin:0 0 8px;color:#fff}p{font:16px system-ui;color:#8b949e;margin:0 0 28px}
+table{border-collapse:collapse;width:100%;font-size:15px}th,td{padding:11px 14px;border-bottom:1px solid #30363d;text-align:left}
+th{color:#8b949e}.ok{color:#3fb950;font-weight:700}.warn{color:#d29922;font-weight:700}
+</style>
+<main><h1>Pruebas de la API completadas</h1><p>.NET 10 · EF Core · DTOs · AutoMapper · 11 casos ejecutados</p>
+<table><thead><tr><th>Prueba</th><th>Código</th><th>Resultado</th></tr></thead><tbody>
+<tr><td>Listar observatorios</td><td class="ok">200</td><td>DTOs devueltos</td></tr>
+<tr><td>Recurso inexistente</td><td class="warn">404</td><td>Not Found</td></tr>
+<tr><td>DTO inválido</td><td class="warn">400</td><td>Validación automática</td></tr>
+<tr><td>Crear observatorio</td><td class="ok">201</td><td>CreatedAtAction</td></tr>
+<tr><td>Nombre duplicado</td><td class="warn">409</td><td>Regla de negocio</td></tr>
+<tr><td>Actualizar observatorio</td><td class="ok">204</td><td>No Content</td></tr>
+<tr><td>Crear reserva</td><td class="ok">201</td><td>DTO con nombre relacionado</td></tr>
+<tr><td>Horario duplicado</td><td class="warn">409</td><td>Regla de negocio</td></tr>
+<tr><td>Filtrar reservas</td><td class="ok">200</td><td>Query string</td></tr>
+<tr><td>Ruta anidada</td><td class="ok">200</td><td>Observatorio y reservas</td></tr>
+<tr><td>Eliminar reserva</td><td class="ok">204</td><td>No Content</td></tr>
+</tbody></table></main></html>

@@ -1,0 +1,31 @@
+@host = http://localhost:5000
+
+GET {{host}}/api/observatorios
+Accept: application/json
+
+###
+GET {{host}}/api/reservasobservacion?estado=Confirmada&desde=2027-01-01
+Accept: application/json
+
+###
+POST {{host}}/api/observatorios
+Content-Type: application/json
+
+{
+  "nombre": "Ventana del Cosmos",
+  "ciudad": "Cusco",
+  "capacidad": 30,
+  "activo": true
+}
+
+###
+POST {{host}}/api/reservasobservacion
+Content-Type: application/json
+
+{
+  "observatorioId": 1,
+  "visitante": "María López",
+  "correo": "maria@example.com",
+  "fechaHora": "2027-06-20T20:30:00",
+  "cantidadPersonas": 3
+}

@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ObservatoriosApi.Api/ObservatoriosApi.Api.csproj" />
+  <Project Path="ObservatoriosApi.Datos/ObservatoriosApi.Datos.csproj" />
+  <Project Path="ObservatoriosApi.Entidades/ObservatoriosApi.Entidades.csproj" />
+  <Project Path="ObservatoriosApi.Negocio/ObservatoriosApi.Negocio.csproj" />
+</Solution>
