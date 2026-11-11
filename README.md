@@ -28,17 +28,6 @@ http://127.0.0.1:5087/swagger
 
 Para detenerla, presiona `Ctrl + C` en la terminal.
 
-## Ejecutar las pruebas
-
-Deja la API encendida y abre otra terminal en la carpeta del proyecto:
-
-```bash
-chmod +x tests/probar-api.sh
-./tests/probar-api.sh http://127.0.0.1:5087
-```
-
-Las pruebas revisan los CRUD, el filtro, la ruta anidada y las respuestas **200, 201, 204, 400, 404 y 409**.
-
 ## Ejecución con SQL Server
 
 1. Ejecuta `database/observatorios.sql` en SQL Server.
@@ -61,7 +50,6 @@ La cadena real no debe subirse a GitHub.
 - `ObservatoriosApi.Datos`: DbContext y repositorios.
 - `ObservatoriosApi.Entidades`: entidades y DTOs.
 - `database`: script de la base de datos.
-- `tests`: prueba automática de los endpoints.
 
 ## Funciones principales
 
