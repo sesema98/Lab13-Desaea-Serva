@@ -1,93 +1,72 @@
-# Lab13 Desaea Serva
+# Laboratorio 13 - API de Observatorios
 
-Web API REST en capas para administrar observatorios astronómicos y reservas de sesiones de observación. Un observatorio puede tener muchas reservas. La API recibe y devuelve únicamente DTOs.
+API REST sencilla para administrar observatorios astronómicos y reservas de visitas. Fue desarrollada con **.NET 10**, Entity Framework Core, DTOs y AutoMapper.
 
-## Proyectos
+## Requisitos
 
-- `ObservatoriosApi.Entidades`: entidades generadas a partir del modelo de datos y DTOs.
-- `ObservatoriosApi.Datos`: `DbContext`, interfaces y repositorios con EF Core y LINQ.
-- `ObservatoriosApi.Negocio`: servicios, reglas de negocio y `MappingProfile`.
-- `ObservatoriosApi.Api`: controladores, Swagger e inyección de dependencias.
+- .NET SDK 10
+- Git
+- Visual Studio Code con la extensión **C# Dev Kit**
 
-La cadena de referencias es `Api -> Negocio -> Datos -> Entidades`.
+## Ejecución rápida
 
-## Ejecución en VS Code
-
-1. Instala las extensiones C# Dev Kit y REST Client.
-2. Ejecuta `database/observatorios.sql` en SQL Server.
-3. Guarda la contraseña sin subirla al repositorio:
-
-   ```bash
-   cd ObservatoriosApi.Api
-   dotnet user-secrets init
-   dotnet user-secrets set 'ConnectionStrings:Observatorios' 'TU_CADENA_LOCAL'
-   ```
-
-4. Ejecuta `dotnet restore`, `dotnet build` y `dotnet run --project ObservatoriosApi.Api`.
-5. Abre `/swagger` o usa `ObservatoriosApi.Api/ObservatoriosApi.http`.
-
-## Pruebas sin SQL Server
-
-Para revisar toda la API antes de configurar SQL Server:
+Esta opción usa una base de datos temporal y no necesita SQL Server.
 
 ```bash
+git clone https://github.com/sesema98/Lab13-Desaea-Serva.git
+cd Lab13-Desaea-Serva
+dotnet restore
+dotnet build
 UseInMemoryDatabase=true dotnet run --project ObservatoriosApi.Api --urls http://127.0.0.1:5087
+```
+
+Con la API ejecutándose, abre en el navegador:
+
+```text
+http://127.0.0.1:5087/swagger
+```
+
+Para detenerla, presiona `Ctrl + C` en la terminal.
+
+## Ejecutar las pruebas
+
+Deja la API encendida y abre otra terminal en la carpeta del proyecto:
+
+```bash
+chmod +x tests/probar-api.sh
 ./tests/probar-api.sh http://127.0.0.1:5087
 ```
 
-Este modo existe solamente para pruebas. La configuración normal sigue usando SQL Server y el script Database First.
+Las pruebas revisan los CRUD, el filtro, la ruta anidada y las respuestas **200, 201, 204, 400, 404 y 409**.
 
-## Scaffold Database First
+## Ejecución con SQL Server
 
-Después de crear la base, el modelo se puede regenerar con:
-
-```bash
-dotnet tool install --global dotnet-ef
-dotnet ef dbcontext scaffold 'TU_CADENA' Microsoft.EntityFrameworkCore.SqlServer \
-  --project ObservatoriosApi.Datos --startup-project ObservatoriosApi.Api \
-  --output-dir Models --context ObservatoriosContext --no-onconfiguring --force
-```
-
-Luego se mueven `Observatorio.cs` y `ReservaObservacion.cs` a `ObservatoriosApi.Entidades` y se ajustan los namespaces, como pide la guía.
-
-## Reglas de negocio
-
-- El nombre del observatorio no se puede repetir.
-- Un observatorio con reservas no se puede eliminar.
-- Las reservas deben ser futuras, respetar la capacidad y pertenecer a un observatorio activo.
-- No se permiten dos reservas no canceladas en el mismo observatorio y horario.
-
-## Sustentación del MappingProfile
-
-| Origen -> Destino | Motivo | Configuración especial |
-|---|---|---|
-| Observatorio -> ObservatorioDto | Entidad a DTO de lectura para no exponer la entidad | Ninguna, los nombres coinciden |
-| ObservatorioCrearDto -> Observatorio | DTO de entrada a entidad nueva | Ninguna |
-| ObservatorioActualizarDto -> Observatorio | DTO de entrada sobre una entidad existente | Se usa `Map(origen, destino)` en el servicio |
-| ReservaObservacion -> ReservaObservacionDto | Entidad a DTO de lectura | `ForMember` obtiene el nombre del observatorio |
-| ReservaObservacionCrearDto -> ReservaObservacion | DTO de entrada a entidad nueva | `ForMember` asigna `Pendiente` como estado inicial |
-| ReservaObservacionActualizarDto -> ReservaObservacion | DTO de entrada sobre una entidad existente | Se usa `Map(origen, destino)` en el servicio |
-
-No se usa `ReverseMap()` porque los modelos de lectura y escritura tienen responsabilidades distintas.
-
-## Endpoints
-
-- CRUD de observatorios: `GET/POST /api/observatorios`, `GET/PUT/DELETE /api/observatorios/{id}`.
-- CRUD de reservas: `GET/POST /api/reservasobservacion`, `GET/PUT/DELETE /api/reservasobservacion/{id}`.
-- Filtros: `GET /api/reservasobservacion?estado=Confirmada&desde=2027-01-01&hasta=2027-12-31`.
-- Ruta anidada: `GET /api/observatorios/{id}/reservas`.
-
-Los controladores devuelven 200, 201, 204, 400, 404 y 409 según corresponda.
-
-## Publicar el repositorio
+1. Ejecuta `database/observatorios.sql` en SQL Server.
+2. Guarda tu cadena de conexión local:
 
 ```bash
-git init
-git add .
-git commit -m "API en capas de observatorios"
-git branch -M main
-git remote add origin URL_DE_TU_REPOSITORIO
-git push -u origin main
+cd ObservatoriosApi.Api
+dotnet user-secrets init
+dotnet user-secrets set "ConnectionStrings:Observatorios" "TU_CADENA_DE_CONEXION"
+cd ..
+dotnet run --project ObservatoriosApi.Api
 ```
 
-No publiques contraseñas ni cadenas de conexión reales. Usa `dotnet user-secrets` para la clave local.
+La cadena real no debe subirse a GitHub.
+
+## Estructura
+
+- `ObservatoriosApi.Api`: controladores y Swagger.
+- `ObservatoriosApi.Negocio`: servicios, reglas y AutoMapper.
+- `ObservatoriosApi.Datos`: DbContext y repositorios.
+- `ObservatoriosApi.Entidades`: entidades y DTOs.
+- `database`: script de la base de datos.
+- `tests`: prueba automática de los endpoints.
+
+## Funciones principales
+
+- CRUD de observatorios.
+- CRUD de reservas.
+- Filtro de reservas por estado y fecha.
+- Consulta de reservas de un observatorio.
+- Validaciones y reglas de negocio.
